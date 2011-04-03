@@ -493,7 +493,7 @@ inline void TFTLCD::write8(uint8_t d) {
 
 #	ifdef USE_WORKSHOP88_PIN_REMAP
 	uint8_t o = d;
-	d = (o << 6 DATA1_MASK) | (o >> 2 & DATA2_MASK);
+	d = (o << 6 & B11000000) | (o >> 2 & B00111111);
 #	endif
 
   DATAPORT2 = (DATAPORT2 & DATA1_MASK) | 
@@ -523,7 +523,7 @@ inline uint8_t TFTLCD::read8(void) {
 
 #	ifdef USE_WORKSHOP88_PIN_REMAP
 	tmp = d;
-	d = (B11000000 & tmp >> 6) | (B111111 & tmp << 2)
+	d = ((tmp >> 6) & B00000011) | ((tmp << 2) & B11111100);
 #	endif
 
 #elif defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega2560__)  || defined(__AVR_ATmega1280__) 
