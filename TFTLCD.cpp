@@ -5,6 +5,8 @@
 // comment or uncomment the next line for special pinout!
 //#define USE_ADAFRUIT_SHIELD_PINOUT 1
 
+#define USE_WORKSHOP88_PIN_REMAP
+
 
 #ifdef USE_ADAFRUIT_SHIELD_PINOUT
 
@@ -489,6 +491,11 @@ inline void TFTLCD::setReadDir(void) {
 inline void TFTLCD::write8(uint8_t d) {
 #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined (__AVR_ATmega328) || (__AVR_ATmega8__)
 
+#	ifdef USE_WORKSHOP88_PIN_REMAP
+	uint8_t o = d;
+	d = (o << 6 DATA1_MASK) | (o >> 2 & DATA2_MASK);
+#	endif
+
   DATAPORT2 = (DATAPORT2 & DATA1_MASK) | 
     (d & DATA2_MASK);
   DATAPORT1 = (DATAPORT1 & DATA2_MASK) | 
@@ -507,8 +514,17 @@ inline uint8_t TFTLCD::read8(void) {
  uint8_t d;
 #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined (__AVR_ATmega328) || (__AVR_ATmega8__)
 
+#	ifdef USE_WORKSHOP88_PIN_REMAP
+	uint8_t tmp;
+#	endif
+
  d = DATAPIN1 & DATA1_MASK; 
  d |= DATAPIN2 & DATA2_MASK; 
+
+#	ifdef USE_WORKSHOP88_PIN_REMAP
+	tmp = d;
+	d = (B11000000 & tmp >> 6) | (B111111 & tmp << 2)
+#	endif
 
 #elif defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega2560__)  || defined(__AVR_ATmega1280__) 
 
