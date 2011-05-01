@@ -66,6 +66,15 @@ void TFTLCD::drawString(uint16_t x, uint16_t y, char *c,
     c++;
   }
 }
+void TFTLCD::drawLandscapeString(uint16_t x, uint16_t y, char *c, 
+			uint16_t color, uint8_t size) {
+  while (c[0] != 0) {
+    drawLandscapeChar(x, y, c[0], color, size);
+      y -= size*6;                                   // was x += size*6;  effects 
+    c++;
+  }
+}
+
 // draw a character
 void TFTLCD::drawChar(uint16_t x, uint16_t y, char c, 
 		      uint16_t color, uint8_t size) {
@@ -83,6 +92,24 @@ void TFTLCD::drawChar(uint16_t x, uint16_t y, char c,
     }
   }
 }
+// draw a landscape character
+void TFTLCD::drawLandscapeChar(uint16_t x, uint16_t y, char c, 
+		      uint16_t color, uint8_t size) {
+  for (uint8_t i =0; i<5; i++ ) {
+    uint8_t line = pgm_read_byte(font+(c*5)+i);
+    for (uint8_t j = 0; j<8; j++) {
+      if (line & 0x1) {
+	if (size == 1) // default size
+	  drawPixel(x+j, y-i, color);                        // was: drawPixel(x+i, y+j, 
+	else {  // big size
+      fillRect(x+j*size, y-i*size, size, size, color);         //was: (x+i*size, 
+	} 
+      }
+      line >>= 1;
+    }
+  }
+}
+
 
 // draw a rectangle
 void TFTLCD::drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, 

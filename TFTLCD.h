@@ -76,7 +76,9 @@ class TFTLCD {
   void drawCircle(uint16_t x0, uint16_t y0, uint16_t r,	uint16_t color);
   void fillCircle(uint16_t x0, uint16_t y0, uint16_t r,	uint16_t color);
   void drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint8_t s = 1);
+  void drawLandscapeChar(uint16_t x, uint16_t y, char c, uint16_t color, uint8_t s = 1);
   void drawString(uint16_t x, uint16_t y, char *c, uint16_t color, uint8_t s = 1);
+  void drawLandscapeString(uint16_t x, uint16_t y, char *c, uint16_t color, uint8_t s = 1);
 
   // commands
   void initDisplay(void);
